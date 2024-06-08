@@ -1,7 +1,6 @@
 package server
 
 import (
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -12,8 +11,8 @@ type FiberServer struct {
 func New() *FiberServer {
 	server := &FiberServer{
 		App: fiber.New(fiber.Config{
-			ServerHeader: "FiberServer",
-			AppName:      "Employe Management",
+			ServerHeader: "Thd3rServer",
+			AppName:      "Employee Management",
 		}),
 	}
 

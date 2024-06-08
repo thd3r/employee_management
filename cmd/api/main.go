@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	
+
 	"github.com/thd3r/employee_management/internal/database"
 	"github.com/thd3r/employee_management/internal/server"
 	"github.com/thd3r/employee_management/routes"

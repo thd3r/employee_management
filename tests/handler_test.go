@@ -2,11 +2,12 @@ package tests
 
 import (
 	"io"
+	"testing"
 	"net/http"
+
 	"github.com/thd3r/employee_management/controllers"
 	"github.com/thd3r/employee_management/internal/server"
 	"github.com/thd3r/employee_management/routes"
-	"testing"
 
 	"github.com/gofiber/fiber/v2"
 )
