@@ -3,14 +3,17 @@ package routes
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/thd3r/employee_management/controllers"
 	"github.com/thd3r/employee_management/internal/server"
 
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
-var port = os.Getenv("PORT")
+var port, _ = strconv.Atoi(os.Getenv("PORT"))
 
 func App(s *server.FiberServer) {
 	s.App.Get("/", controllers.Index)

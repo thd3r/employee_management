@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"fmt"
-	"strings"
 	"time"
+	"strings"
 
 	"github.com/thd3r/employee_management/models"
 	"github.com/thd3r/employee_management/models/employe"
