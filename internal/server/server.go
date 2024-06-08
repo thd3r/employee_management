@@ -2,10 +2,13 @@ package server
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/thd3r/employee_management/internal/database"
 )
 
 type FiberServer struct {
 	*fiber.App
+
+	db database.Service
 }
 
 func New() *FiberServer {
@@ -14,6 +17,8 @@ func New() *FiberServer {
 			ServerHeader: "Thd3rServer",
 			AppName:      "Employee Management",
 		}),
+
+		db: database.New(),
 	}
 
 	return server

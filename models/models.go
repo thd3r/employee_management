@@ -8,25 +8,25 @@ import (
 )
 
 func Health() map[string]string {
-	return database.Health()
+	return database.DbInstance.Health()
 }
 
 func CreateEmploye(employe *employe.Employe) *gorm.DB {
-	return database.Instance.Cursor.Create(&employe)
+	return database.DbInstance.Cursor.Create(&employe)
 }
 
 func UpdateEmploye(employe *employe.Employe, employeId string) *gorm.DB {
-	return database.Instance.Cursor.Where("id = ?", employeId).Updates(&employe)
+	return database.DbInstance.Cursor.Where("id = ?", employeId).Updates(&employe)
 }
 
 func DeleteEmploye(employe *employe.Employe, employeId string) *gorm.DB {
-	return database.Instance.Cursor.Where("id = ?", employeId).Delete(&employe)
+	return database.DbInstance.Cursor.Where("id = ?", employeId).Delete(&employe)
 }
 
 func GetAllEmploye(employe *[]employe.Employe) *gorm.DB {
-	return database.Instance.Cursor.Find(&employe)
+	return database.DbInstance.Cursor.Find(&employe)
 }
 
 func GetEmployeById(employe *employe.Employe, employeId string) *gorm.DB {
-	return database.Instance.Cursor.First(&employe, "id = ?", employeId)
+	return database.DbInstance.Cursor.First(&employe, "id = ?", employeId)
 }
