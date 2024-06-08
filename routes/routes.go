@@ -20,17 +20,16 @@ func App(s *server.FiberServer) {
 	api.Get("/", controllers.IndexApiHandler)
 
 	v1 := api.Group("/v1")
-	v1.Use(cors.New(cors.Config{
+	v1.Get("/", controllers.IndexApiHandler)
+	v1.Get("/sitemap", controllers.ApiSitemap)
+
+	employe := v1.Group("/employe")
+	employe.Use(cors.New(cors.Config{
 		AllowOrigins:     fmt.Sprintf("http://localhost:%v", port),
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowMethods:     "GET, POST, PATCH, DELETE",
 		AllowCredentials: true,
 	}))
-
-	v1.Get("/", controllers.IndexApiHandler)
-	v1.Get("/sitemap", controllers.ApiSitemap)
-
-	employe := v1.Group("/employe")
 
 	employe.Get("/", controllers.GetAllEmployeHandler)
 	employe.Get("/:employeId/detail", controllers.GetEmployeByIdHandler)
