@@ -13,7 +13,7 @@ type ErrorResponseHandler struct {
 	Message string `json:"msg"`
 }
 
-func ValidateRequest(data any) []*ErrorResponseHandler {
+func ValidateRequestStruct(data any) []*ErrorResponseHandler {
 	var errors []*ErrorResponseHandler
 
 	validate := validator.New()
@@ -27,8 +27,10 @@ func ValidateRequest(data any) []*ErrorResponseHandler {
 			element.Tag = err.Tag()
 			element.Message = ""
 
-			if len(err.Value().(string)) != len(err.Param()) {
-				element.Message += fmt.Sprintf("The minimum value of the %s parameter is %v", err.Field(), err.Param())
+			if len(err.Value().(string)) != len(err.Param()) && err.Tag() == "min" {
+				element.Message += fmt.Sprintf("The minimum value of the %s parameter is %v characters", err.Field(), err.Param())
+			} else if len(err.Value().(string)) != len(err.Param()) && err.Tag() == "max" {
+				element.Message += fmt.Sprintf("The maximum value of the %s parameter is %v characters", err.Field(), err.Param())
 			} else {
 				element.Message += fmt.Sprintf("The value of the %s parameter cannot be empty", err.Field())
 			}

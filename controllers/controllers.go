@@ -8,20 +8,20 @@ import (
 
 func Index(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"code": 200,
+		"code": fiber.StatusOK,
 	})
 }
 
 func IndexApiHandler(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-		"msg":  `You don't have permission to access this resource`,
+		"errors":  `You don't have permission to access this resource`,
 		"code": fiber.StatusForbidden,
 	})
 }
 
 func Health(c *fiber.Ctx) error {
 	dataHealth := models.Health()
-	return c.JSON(dataHealth)
+	return c.Status(fiber.StatusOK).JSON(dataHealth)
 }
 
 func ApiSitemap(c *fiber.Ctx) error {

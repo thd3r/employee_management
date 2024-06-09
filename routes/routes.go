@@ -8,6 +8,7 @@ import (
 	"github.com/thd3r/employee_management/controllers"
 	"github.com/thd3r/employee_management/internal/server"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -27,6 +28,11 @@ func App(s *server.FiberServer) {
 	v1.Get("/sitemap", controllers.ApiSitemap)
 
 	employe := v1.Group("/employe")
+	employe.Use([]string{"/", "/create", "/:employeId/detail", "/:employeId/update", "/:employeId/delete"}, func(c *fiber.Ctx) error {
+		c.Request().Header.Set("Origin", fmt.Sprintf("http://localhost:%v", port))
+		return c.Next()
+	})
+
 	employe.Use(cors.New(cors.Config{
 		AllowOrigins:     fmt.Sprintf("http://localhost:%v", port),
 		AllowHeaders:     "Origin, Content-Type, Accept",
