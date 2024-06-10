@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/thd3r/employee_management/internal/server"
-	"github.com/thd3r/employee_management/routes"
+	"github.com/thd3r/employee_management/internal/server/routes"
 
 	_ "github.com/joho/godotenv/autoload"
 )

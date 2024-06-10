@@ -80,8 +80,8 @@ func GetAllEmployeHandler(c *fiber.Ctx) error {
 
 func GetEmployeByIdHandler(c *fiber.Ctx) error {
 	employeId := c.Params("employeId")
-
 	var dataEmploye employe.Employe
+
 	if result := models.GetEmployeById(&dataEmploye, employeId); result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{

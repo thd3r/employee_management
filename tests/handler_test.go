@@ -7,7 +7,7 @@ import (
 
 	"github.com/thd3r/employee_management/controllers"
 	"github.com/thd3r/employee_management/internal/server"
-	"github.com/thd3r/employee_management/routes"
+	"github.com/thd3r/employee_management/internal/server/routes"
 
 	"github.com/gofiber/fiber/v2"
 )
