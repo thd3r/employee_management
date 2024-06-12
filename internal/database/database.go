@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/thd3r/employee_management/models/employe"
+	"github.com/thd3r/employee_management/models/employee"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -68,7 +68,7 @@ func New() Service {
 	cursor.SetMaxIdleConns(50)
 	cursor.SetMaxOpenConns(50)
 
-	db.AutoMigrate(&employe.Employe{})
+	db.AutoMigrate(&employee.Employee{})
 
 	DbInstance = &service{
 		Cursor: db,

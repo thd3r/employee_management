@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/thd3r/employee_management/models"
-	"github.com/thd3r/employee_management/models/employe"
-	"github.com/thd3r/employee_management/models/employe/schema"
+	"github.com/thd3r/employee_management/models/employee"
+	"github.com/thd3r/employee_management/models/employee/schema"
 	"github.com/thd3r/employee_management/utils/validator"
 
 	"gorm.io/gorm"
@@ -16,37 +16,37 @@ import (
 	"github.com/google/uuid"
 )
 
-func CreateEmployeHandler(c *fiber.Ctx) error {
-	var dataEmployeCreate schema.CreateEmployeSchema
+func CreateEmployeeHandler(c *fiber.Ctx) error {
+	dataEmployeeCreate := new(schema.CreateEmployeeSchema)
 
-	if err := c.BodyParser(&dataEmployeCreate); err != nil {
+	if err := c.BodyParser(&dataEmployeeCreate); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"errors": err.Error(),
 			"code":   fiber.StatusBadRequest,
 		})
 	}
 
-	if err := validator.ValidateRequestStruct(dataEmployeCreate); err != nil {
+	if err := validator.ValidateRequestStruct(dataEmployeeCreate); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"errors": err,
 			"code":   fiber.StatusBadRequest,
 		})
 	}
 
-	newEmploye := employe.Employe{
+	newEmployee := employee.Employee{
 		Id:        uuid.New().String(),
-		Name:      dataEmployeCreate.Name,
-		Role:      dataEmployeCreate.Role,
-		Salary:    dataEmployeCreate.Salary,
-		Position:  dataEmployeCreate.Position,
+		Name:      dataEmployeeCreate.Name,
+		Role:      dataEmployeeCreate.Role,
+		Salary:    dataEmployeeCreate.Salary,
+		Position:  dataEmployeeCreate.Position,
 		CreatedAt: time.Now(),
 	}
 
-	data := models.CreateEmploye(&newEmploye)
+	data := models.CreateEmployee(&newEmployee)
 	if data.Error != nil {
 		if strings.Contains(data.Error.Error(), "Duplicate entry") {
 			return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-				"errors": fmt.Sprintf("Employee named %s is available", dataEmployeCreate.Name),
+				"errors": fmt.Sprintf("Employee named %s is available", dataEmployeeCreate.Name),
 				"code":   fiber.StatusConflict,
 			})
 		} else {
@@ -63,26 +63,26 @@ func CreateEmployeHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"data": newEmploye,
+		"data": newEmployee,
 		"code": fiber.StatusCreated,
 	})
 }
 
-func GetAllEmployeHandler(c *fiber.Ctx) error {
-	var employe []employe.Employe
+func GetAllEmployeeHandler(c *fiber.Ctx) error {
+	var dataEmployee []employee.Employee
 
-	models.GetAllEmploye(&employe)
+	models.GetAllEmployee(&dataEmployee)
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": employe,
+		"data": dataEmployee,
 		"code": fiber.StatusOK,
 	})
 }
 
-func GetEmployeByIdHandler(c *fiber.Ctx) error {
-	employeId := c.Params("employeId")
-	var dataEmploye employe.Employe
+func GetEmployeeByIdHandler(c *fiber.Ctx) error {
+	employeId := c.Params("employeeId")
+	var dataEmployee employee.Employee
 
-	if result := models.GetEmployeById(&dataEmploye, employeId); result.Error != nil {
+	if result := models.GetEmployeeById(&dataEmployee, employeId); result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"errors": fmt.Sprintf("Employee with id %v not found", employeId),
@@ -97,35 +97,35 @@ func GetEmployeByIdHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": dataEmploye,
+		"data": dataEmployee,
 		"code": fiber.StatusOK,
 	})
 }
 
-func UpdateEmployeHandler(c *fiber.Ctx) error {
-	employeId := c.Params("employeId")
-	var dataEmployeUpdate schema.UpdateEmployeSchema
+func UpdateEmployeeHandler(c *fiber.Ctx) error {
+	employeId := c.Params("employeeId")
+	dataEmployeeUpdate := new(schema.UpdateEmployeeSchema)
 
-	if err := c.BodyParser(&dataEmployeUpdate); err != nil {
+	if err := c.BodyParser(&dataEmployeeUpdate); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"errors": err.Error(),
 			"code":   fiber.StatusBadRequest,
 		})
 	}
 
-	if err := validator.ValidateRequestStruct(dataEmployeUpdate); err != nil {
+	if err := validator.ValidateRequestStruct(dataEmployeeUpdate); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"errors": err,
 			"code":   fiber.StatusBadRequest,
 		})
 	}
 
-	var dataEmploye employe.Employe
+	var dataEmployee employee.Employee
 
-	if result := models.GetEmployeById(&dataEmploye, employeId); result.Error != nil {
+	if result := models.GetEmployeeById(&dataEmployee, employeId); result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"errors": fmt.Sprintf("Employee with name %s not found", dataEmployeUpdate.Name),
+				"errors": fmt.Sprintf("Employee with name %s not found", dataEmployeeUpdate.Name),
 				"code":   fiber.StatusNotFound,
 			})
 		}
@@ -136,28 +136,28 @@ func UpdateEmployeHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	if dataEmployeUpdate.Name != "" {
-		dataEmploye.Name = dataEmployeUpdate.Name
+	if dataEmployeeUpdate.Name != "" {
+		dataEmployee.Name = dataEmployeeUpdate.Name
 	}
 
-	if dataEmployeUpdate.Role != "" {
-		dataEmploye.Role = dataEmployeUpdate.Role
+	if dataEmployeeUpdate.Role != "" {
+		dataEmployee.Role = dataEmployeeUpdate.Role
 	}
 
-	if dataEmployeUpdate.Salary != "" {
-		dataEmploye.Salary = dataEmployeUpdate.Salary
+	if dataEmployeeUpdate.Salary != "" {
+		dataEmployee.Salary = dataEmployeeUpdate.Salary
 	}
 
-	if dataEmployeUpdate.Position != "" {
-		dataEmploye.Position = dataEmployeUpdate.Position
+	if dataEmployeeUpdate.Position != "" {
+		dataEmployee.Position = dataEmployeeUpdate.Position
 	}
 
-	dataEmploye.UpdatedAt = time.Now()
+	dataEmployee.UpdatedAt = time.Now()
 
-	if result := models.UpdateEmploye(&dataEmploye, employeId); result.Error != nil {
+	if result := models.UpdateEmployee(&dataEmployee, employeId); result.Error != nil {
 		if strings.Contains(result.Error.Error(), "Duplicate entry") {
 			return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-				"errors": fmt.Sprintf("Employee named %s is available", dataEmployeUpdate.Name),
+				"errors": fmt.Sprintf("Employee named %s is available", dataEmployeeUpdate.Name),
 				"code":   fiber.StatusConflict,
 			})
 		} else {
@@ -169,15 +169,15 @@ func UpdateEmployeHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": dataEmploye,
+		"data": dataEmployee,
 		"code": fiber.StatusOK,
 	})
 
 }
 
-func DeleteEmployeHandler(c *fiber.Ctx) error {
-	employeId := c.Params("employeId")
-	result := models.DeleteEmploye(&employe.Employe{}, employeId)
+func DeleteEmployeeHandler(c *fiber.Ctx) error {
+	employeeId := c.Params("employeeId")
+	result := models.DeleteEmployee(&employee.Employee{}, employeeId)
 
 	if result.Error != nil {
 		return c.Status(fiber.StatusBadGateway).JSON(fiber.Map{
@@ -188,13 +188,13 @@ func DeleteEmployeHandler(c *fiber.Ctx) error {
 
 	if result.RowsAffected == 0 {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"errors": fmt.Sprintf("Employee with id %v not found", employeId),
+			"errors": fmt.Sprintf("Employee with id %v not found", employeeId),
 			"code":   fiber.StatusNotFound,
 		})
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"errors": fmt.Sprintf("Employee with id %v has been deleted", employeId),
+		"errors": fmt.Sprintf("Employee with id %v has been deleted", employeeId),
 		"code":   fiber.StatusOK,
 	})
 }

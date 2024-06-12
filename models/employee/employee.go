@@ -1,10 +1,10 @@
-package employe
+package employee
 
 import (
 	"time"
 )
 
-type Employe struct {
+type Employee struct {
 	Id        string    `gorm:"type:char(36);primaryKey" json:"id"`
 	Name      string    `gorm:"type:varchar(250)" json:"name"`
 	Role      string    `gorm:"type:varchar(50)" json:"role"`

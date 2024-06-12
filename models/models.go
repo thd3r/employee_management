@@ -2,7 +2,7 @@ package models
 
 import (
 	"github.com/thd3r/employee_management/internal/database"
-	"github.com/thd3r/employee_management/models/employe"
+	"github.com/thd3r/employee_management/models/employee"
 
 	"gorm.io/gorm"
 )
@@ -11,22 +11,22 @@ func Health() map[string]string {
 	return database.DbInstance.Health()
 }
 
-func CreateEmploye(employe *employe.Employe) *gorm.DB {
-	return database.DbInstance.Cursor.Create(&employe)
+func CreateEmployee(employee *employee.Employee) *gorm.DB {
+	return database.DbInstance.Cursor.Create(&employee)
 }
 
-func UpdateEmploye(employe *employe.Employe, employeId string) *gorm.DB {
-	return database.DbInstance.Cursor.Where("id = ?", employeId).Updates(&employe)
+func UpdateEmployee(employee *employee.Employee, employeeId string) *gorm.DB {
+	return database.DbInstance.Cursor.Where("id = ?", employeeId).Updates(&employee)
 }
 
-func DeleteEmploye(employe *employe.Employe, employeId string) *gorm.DB {
-	return database.DbInstance.Cursor.Where("id = ?", employeId).Delete(&employe)
+func DeleteEmployee(employee *employee.Employee, employeeId string) *gorm.DB {
+	return database.DbInstance.Cursor.Where("id = ?", employeeId).Delete(&employee)
 }
 
-func GetAllEmploye(employe *[]employe.Employe) *gorm.DB {
-	return database.DbInstance.Cursor.Find(&employe)
+func GetAllEmployee(employee *[]employee.Employee) *gorm.DB {
+	return database.DbInstance.Cursor.Find(&employee)
 }
 
-func GetEmployeById(employe *employe.Employe, employeId string) *gorm.DB {
-	return database.DbInstance.Cursor.First(&employe, "id = ?", employeId)
+func GetEmployeeById(employee *employee.Employee, employeeId string) *gorm.DB {
+	return database.DbInstance.Cursor.First(&employee, "id = ?", employeeId)
 }
