@@ -36,7 +36,6 @@ func CreateEmployeeHandler(c *fiber.Ctx) error {
 	newEmployee := employee.Employee{
 		Id:        uuid.New().String(),
 		Name:      dataEmployeeCreate.Name,
-		Role:      dataEmployeeCreate.Role,
 		Salary:    dataEmployeeCreate.Salary,
 		Position:  dataEmployeeCreate.Position,
 		CreatedAt: time.Now(),
@@ -138,10 +137,6 @@ func UpdateEmployeeHandler(c *fiber.Ctx) error {
 
 	if dataEmployeeUpdate.Name != "" {
 		dataEmployee.Name = dataEmployeeUpdate.Name
-	}
-
-	if dataEmployeeUpdate.Role != "" {
-		dataEmployee.Role = dataEmployeeUpdate.Role
 	}
 
 	if dataEmployeeUpdate.Salary != "" {
